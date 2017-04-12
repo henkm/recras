@@ -48,6 +48,7 @@ A combination has a number of fields. __Not all the fields present in the native
 - allowed_to_pay_later
 - combination_items
 - contact_form_id
+- itineraries (returns a list of `<Recras::Itinerary>` objects)
 - client (returns the client object that made the request)
 
 
@@ -56,7 +57,15 @@ A combination has a number of fields. __Not all the fields present in the native
 @recras_client.combinations # => returns an array of <Recras::Combination> objects
 
 # Find a single combination:
-@recras_client.combination(4) => <Recras::Combination:0x007fc617cd1948 @id=4 ...>
+@combination = @recras_client.combination(4) => <Recras::Combination:0x007fc617cd1948 @id=4 ...>
+
+# Show the itineraries
+for itinerary in @combination.itineraries
+	puts itenerary
+end
+# outputs:
+# Ontvangst met koffie - 10 personen (00:30:00)
+# Leer boogschieten - 10 personen (02:15:00)
 ```
 
 ### CombinationItem
@@ -109,6 +118,19 @@ __Important:__ If you don't supply the `items` argument, you have to enter a `nu
 ### ContactForm
 If you see the checkout page of any of Recras' clients, you'll notice that the consumer has to fill in a couple of fields in the last step before the booking. These fields are specific to the selected Combination (arrangement). To know which fields to show, how to label them and with which identifier to submit them, you use the `@combination.contact_form`. In it are `<Recras::ContactFormField>` objects.
 
+A ContactFormField has the following attributes:
+- id
+- name
+- contact_form_id
+- input_type
+- required
+- options
+- special_for_booking (if true, it will be displayed as information on the ticket/booking confirmation)
+- field_identifier
+- contact_form (parent object)
+
+
+
 
 ### Make a booking
 Making a booking is not much different from checking times: you need to know when the consumer wants to book and wich items+quantity. It looks like this:
@@ -126,7 +148,8 @@ contact_form_details: {
     "veel_tekst_0"=>""
 }
 
-@combination.book(number_of_people: 2, date: "2017-04-14T13:00:00+02:00", contact_form_details: contact_form_details) # => #<Recras::Booking:0x007f99bab94c30 @id=8994, @status="reservering", @message="Boeking gemaakt", @customer_id=8986>
+@combination.book(number_of_people: 2, date: "2017-04-14T13:00:00+02:00", contact_form_details: contact_form_details) 
+# => #<Recras::Booking:0x007f99bab94c30 @id=8994, @status="reservering", @message="Boeking gemaakt", @customer_id=8986>
 ```
 
 

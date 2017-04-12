@@ -14,6 +14,7 @@ require "recras/combination_item"
 require "recras/contact_form"
 require "recras/contact_form_field"
 require "recras/booking"
+require "recras/itinerary"
 
 module Recras
 

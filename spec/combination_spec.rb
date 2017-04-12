@@ -99,7 +99,7 @@ describe Recras::Combination do
 		it "creates a booking" do
 			booking = @combination.book(date: @time, number_of_people: 2, contact_form_details: @combination.contact_form.default_values)
 			expect(booking).to be_kind_of Recras::Booking
-			puts @combination.contact_form.default_values
+			# puts @combination.contact_form.default_values
 			# puts booking.inspect
 			expect(booking.status).to eq "reservering"
 			expect(booking.message).to eq "Boeking gemaakt"
@@ -113,6 +113,22 @@ describe Recras::Combination do
 		  result = @client.combination(4)
 		  expect(result).to be_kind_of Recras::Combination
 		  expect(result.id).to eq 4
+		end
+
+		it "has iterneraries" do
+		  result = @client.combination(4)
+		  expect(result.itineraries).to be_kind_of Array
+		end
+
+		it "has iternerary description" do
+		  result = @client.combination(4)
+		  itinerary = result.itineraries.first
+		  expect(itinerary).to be_kind_of Recras::Itinerary
+		  puts itinerary.inspect
+		  expect(itinerary.description).to match /.+/
+		  expect(itinerary.duration_minutes).to be > 0
+		  expect(itinerary.quantity).to be > 0
+		  expect(itinerary.to_s).to match /\d+ persoon/i
 		end
 
 		it "has combiation_items" do
