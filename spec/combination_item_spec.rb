@@ -4,12 +4,12 @@ require "spec_helper"
 describe Recras::CombinationItem do
 
 	before(:all) do
-		@client = Recras::Client.new(username: 'beheer', password: 'demo')
+		@client = Recras::Client.new(username: 'beheer', password: 'demo', host: 'https://demo.recras.nl')
 		@combinations = @client.combinations
 		@combination = @combinations.last
 	end
 
-	
+
 	it "has multiple combination items" do
 		expect(@combination.combination_items).to be_kind_of Array
 		expect(@combination.combination_items.first).to be_kind_of Recras::CombinationItem

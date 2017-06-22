@@ -4,13 +4,13 @@ require "spec_helper"
 describe Recras::Combination do
 
 	before(:all) do
-		@client = Recras::Client.new(username: 'beheer', password: 'demo')
+		@client = Recras::Client.new(username: 'beheer', password: 'demo', host: 'https://demo.recras.nl')
 		@combinations = @client.combinations
 	end
 
 
 
-	
+
 	it "returns multiple combinations" do
 		expect(@combinations).to be_kind_of Array
 		# puts @combinations.last.inspect
@@ -22,7 +22,7 @@ describe Recras::Combination do
 	end
 
 	it "has a contact_form id" do
-		# onlineboeking_contactformulier_id	  
+		# onlineboeking_contactformulier_id
 		expect(@combinations.first.contact_form_id).to be > 0
 	end
 
@@ -36,17 +36,17 @@ describe Recras::Combination do
 		expect(result.allowed_to_pay_later).to be true
 	end
 
-	context ".find" do
-		it "finds a combination without login" do
-  		result = Recras::Combination.find(4)
-			expect(result).to be_kind_of Recras::Combination
-		end
-
-		# it "has no products" do
-		#   result = Recras::Combination.find(4)
-		# 	expect(result.combination_items).to be_kind_of nil
-		# end
-	end
+	# context ".find" do
+	# 	# it "finds a combination without login" do
+  # 	# 	result = Recras::Combination.find(4)
+	# 	# 	expect(result).to be_kind_of Recras::Combination
+	# 	# end
+	#
+	# 	# it "has no products" do
+	# 	#   result = Recras::Combination.find(4)
+	# 	# 	expect(result.combination_items).to be_kind_of nil
+	# 	# end
+	# end
 
 	context "#available_days" do
 

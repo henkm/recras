@@ -15,8 +15,8 @@ module Recras
     attr_accessor :itineraries
     attr_accessor :contact_form_id
     attr_accessor :client
-    
-    # Initializer to transform a +Hash+ into an Combination object    
+
+    # Initializer to transform a +Hash+ into an Combination object
     # @param [Hash] args
     def initialize(args=nil)
       required_args = []
@@ -32,24 +32,20 @@ module Recras
       end
     end
 
-    # find a combination
-    def self.find(id)
-      json = Recras.make_request("arrangementen/#{id}")
-      # puts json
-      return Recras.parse_json(json: json, endpoint: "arrangement")
-    end
+
 
     # returns a Recras::ContactForm
     def contact_form
       json = client.make_request("contactformulieren/#{contact_form_id}")
       cf = Recras.parse_json(json: json, endpoint: "contactformulier", client: client)
+      return cf
     end
 
 
 
     # returns a list of available days (in string format) for a given campaign
     # exampel: combination.available_days(combination_items: [{combination_item_id: 1, number_of_people: 2}])
-    # If no combination_items are given, assume that you want each item to be booked. In that scenario, 
+    # If no combination_items are given, assume that you want each item to be booked. In that scenario,
     # also use the 'number_of_people' argument. E.g.: @combination.available_days(number_of_people: 2).
     def available_days(items: [], number_of_people: nil, from_time: Date.today, until_time: (Time.now + 3600*24*7))
       product_items = convert_items(items, number_of_people)
@@ -78,7 +74,7 @@ module Recras
 
     # returns a list of available days (in string format) for a given campaign
     # exampel: combination.available_days(combination_items: [{combination_item_id: 1, number_of_people: 2}])
-    # If no combination_items are given, assume that you want each item to be booked. In that scenario, 
+    # If no combination_items are given, assume that you want each item to be booked. In that scenario,
     # also use the 'number_of_people' argument. E.g.: @combination.available_days(number_of_people: 2).
     def available_times(items: [], number_of_people: nil, date: nil)
       product_items = convert_items(items, number_of_people)
@@ -108,9 +104,9 @@ module Recras
       date = convert_date(date)
 
       if product_items.any?
-        body_data = { 
-          arrangement_id: id, 
-          producten: product_items, 
+        body_data = {
+          arrangement_id: id,
+          producten: product_items,
           begin: date,
           betaalmethode: payment_method,
           contactformulier: contact_form_details
@@ -120,7 +116,7 @@ module Recras
         if json.is_a?(Hash) && json["error"]
           raise RecrasError.new(self), json["error"]["message"]
         else
-          booking = Recras.parse_json(json: json, endpoint: "booking") 
+          booking = Recras.parse_json(json: json, endpoint: "booking")
           return booking
         end
       else
@@ -177,7 +173,7 @@ module Recras
         end
         return product_items
       end
-      
+
       return items
     end
 

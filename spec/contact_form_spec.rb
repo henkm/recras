@@ -4,11 +4,11 @@ require "spec_helper"
 describe Recras::Combination do
 
 	before(:all) do
-		@client = Recras::Client.new(username: 'beheer', password: 'demo')
+		@client = Recras::Client.new(host: 'https://demo.recras.nl', username: 'beheer', password: 'demo')
 		@combinations = @client.combinations
 		@combination = @combinations.first
 	end
-	
+
 	context "#contact_form", focus: true do
 		it "has a contact form" do
 			contact_form = @combination.contact_form

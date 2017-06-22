@@ -3,8 +3,9 @@ module Recras
   class Client
     # @note The is a required parameter.
     attr_accessor :username
-    # @return [String] Your Wheretocard password
+    # @return [String] Your Recras password
     attr_accessor :password
+    attr_accessor :host
 
 
     #
@@ -15,7 +16,7 @@ module Recras
       required_args = [:username, :password]
       for arg in required_args
         if args.nil? || args[arg].nil?
-          raise RecrasError.new(self), "Insufficient login credentials. Please provide @username, @password"
+          raise RecrasError.new(self), "Insufficient login credentials. Please provide @username, @password and @host"
         end
       end
 
@@ -66,6 +67,6 @@ module Recras
       end
       return a
     end
-    
+
   end
 end

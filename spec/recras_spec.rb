@@ -6,20 +6,20 @@ describe Recras do
   end
 
 	it "returns an error if credentials are false" do
-		client = Recras::Client.new(username: 'beheer', password: 'fout')
+		client = Recras::Client.new(host: 'https://demo.recras.nl', username: 'beheer', password: 'fout')
 		expect(client.valid).to be false
 	end
 
 	it "raises login required message" do
-	  client = Recras::Client.new(username: 'beheer', password: 'fout')
+	  client = Recras::Client.new(host: 'https://demo.recras.nl', username: 'beheer', password: 'fout')
 	  expect{client.me}.to raise_error /Login Required/
 	end
 
 
   context "authentication and default behaviour" do
-	  
+
 		before(:each) do
-			@client = Recras::Client.new(username: 'beheer', password: 'demo')
+			@client = Recras::Client.new(host: 'https://demo.recras.nl', username: 'beheer', password: 'demo')
 		end
 
 		it "returns information about 'me'" do

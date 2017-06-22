@@ -23,9 +23,9 @@ module Recras
   # returns the version number
   def self.version
     VERSION
-  end 
+  end
 
-  # this method maps the recras API objects to 
+  # this method maps the recras API objects to
   # the names used by this gem
   def self.object_mappings
   	[["personeel", Person], ["arrangement", Combination], ["contactformulier", ContactForm], ["velden", ContactFormField], ["booking", Booking]]
@@ -36,11 +36,11 @@ module Recras
   end
 
   # initialize a new Person from given JSON.
-  def new_from_json(json) 
+  def new_from_json(json)
     params = {}
 
     # set each attribute based on the mapping
-    self.attribute_mapping.each do |o,n| 
+    self.attribute_mapping.each do |o,n|
       # if o is a string, parse it
       if n.is_a?(String)
         # check if data type is specified (using @@ symbol)
@@ -56,7 +56,7 @@ module Recras
         else
           params[n] = json[o.to_s]
         end
-        
+
       # else, o is a class. Call the 'parse_children' method on it
       else
         # puts "n is a #{n.class.name}"
@@ -100,7 +100,7 @@ module Recras
   # - an error
   # - a json object
   def self.make_request(endpoint, body: {}, http_method: :get, client: nil)
-    url = "#{Recras.url}/api#{Recras::API_VERSION}/#{endpoint}"
+    url = "#{client.host}/api#{Recras::API_VERSION}/#{endpoint}"
 
     auth = client ? {username: client.username, password: client.password} : nil
 
@@ -109,7 +109,7 @@ module Recras
     else
       response = HTTParty.get(url, basic_auth: auth, body: body)
     end
-    
+
     json = response.parsed_response
     return json
   end
