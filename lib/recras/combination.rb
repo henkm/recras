@@ -52,25 +52,32 @@ module Recras
     def available_days(items: [], number_of_people: nil, from_time: Date.today, until_time: (Time.now + 3600*24*7))
       product_items = convert_items(items, number_of_people)
 
-      if product_items.any?
+      if product_items && product_items.any?
         body_data = {
             arrangement_id: id,
             producten: product_items,
             begin: from_time.strftime("%Y-%m-%d"),
             eind: until_time.strftime("%Y-%m-%d")
         }
-
-        # make request
-        json = client.make_request("onlineboeking/beschikbaredagen", body: body_data.to_json, http_method: :post)
-
-        if json.is_a?(Hash) && json["error"]
-          raise RecrasError.new(self), json["error"]["message"]
-        else
-          return json
-        end
+      elsif number_of_people
+        body_data = {
+            arrangement_id: id,
+            begin: from_time.strftime("%Y-%m-%d"),
+            eind: until_time.strftime("%Y-%m-%d")
+        }
       else
         raise RecrasError.new(self), "Insufficient details provided. Either combination_items or number_of_people are required."
       end
+
+      # make request
+      json = client.make_request("onlineboeking/beschikbaredagen", body: body_data.to_json, http_method: :post)
+
+      if json.is_a?(Hash) && json["error"]
+        raise RecrasError.new(self), json["error"]["message"]
+      else
+        return json
+      end
+
     end
 
 
