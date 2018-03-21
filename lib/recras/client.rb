@@ -13,7 +13,7 @@ module Recras
     #
     # @param [Hash] args
     def initialize(args=nil)
-      # required_args = [:username, :password]
+      required_args = [] # [:username, :password]
       for arg in required_args
         if args.nil? || args[arg].nil?
           raise RecrasError.new(self), "Insufficient login credentials. Please provide @username, @password and @host"
