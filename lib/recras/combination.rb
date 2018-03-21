@@ -13,6 +13,8 @@ module Recras
     attr_accessor :allowed_to_pay_later
     attr_accessor :combination_items
     attr_accessor :itineraries
+    attr_accessor :price_per_person_incl_vat
+    attr_accessor :price_total_incl_vat
     attr_accessor :contact_form_id
     attr_accessor :client
 
@@ -139,7 +141,7 @@ module Recras
     # translates the mapping between the Recras API
     # and the terms used in this gem
     def self.attribute_mapping
-      [["id", "id"],["weergavenaam", "name"],["mag_online", "visible_online"],["aantal_personen", "number_of_people"], ["mag_online_geboekt_worden_achteraf_betalen", "allowed_to_pay_later"], ["regels", Recras::CombinationItem], ["programma", Recras::Itinerary], ["onlineboeking_contactformulier_id", "contact_form_id"]]
+      [["id", "id"],["weergavenaam", "name"],["mag_online", "visible_online"],["aantal_personen", "number_of_people"], ["mag_online_geboekt_worden_achteraf_betalen", "allowed_to_pay_later"], ["regels", Recras::CombinationItem], ["programma", Recras::Itinerary], ["onlineboeking_contactformulier_id", "contact_form_id"], ["prijs_pp_inc","price_per_person_incl_vat"], ["prijs_totaal_inc","price_total_incl_vat"]]
     end
 
     private
