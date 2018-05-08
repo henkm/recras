@@ -8,15 +8,20 @@ module Recras
 
     attr_accessor :id
     attr_accessor :name
+    attr_accessor :welcome_location
     attr_accessor :visible_online
+    attr_accessor :max_number_of_people
     attr_accessor :number_of_people
     attr_accessor :allowed_to_pay_later
     attr_accessor :combination_items
     attr_accessor :itineraries
+    attr_accessor :description
     attr_accessor :price_per_person_incl_vat
     attr_accessor :price_total_incl_vat
+    attr_accessor :seperate_planning
     attr_accessor :contact_form_id
     attr_accessor :client
+    attr_accessor :json
 
     # Initializer to transform a +Hash+ into an Combination object
     # @param [Hash] args
@@ -46,12 +51,18 @@ module Recras
 
 
     # returns a list of available days (in string format) for a given campaign
-    # exampel: combination.available_days(combination_items: [{combination_item_id: 1, number_of_people: 2}])
+    # example: combination.available_days(combination_items: [{combination_item_id: 1, number_of_people: 2}])
     # If no combination_items are given, assume that you want each item to be booked. In that scenario,
     # also use the 'number_of_people' argument. E.g.: @combination.available_days(number_of_people: 2).
     def available_days(items: [], number_of_people: nil, from_time: Date.today, until_time: (Time.now + 3600*24*7))
-      product_items = convert_items(items, number_of_people)
-
+      if items && items.any?
+        begin
+          puts "starting product_items (#{items})"
+          product_items = convert_items(items, number_of_people)
+        rescue
+          # no items
+        end
+      end
       if product_items && product_items.any?
         body_data = {
             arrangement_id: id,
@@ -68,12 +79,12 @@ module Recras
       else
         raise RecrasError.new(self), "Insufficient details provided. Either combination_items or number_of_people are required."
       end
-
       # make request
       json = client.make_request("onlineboeking/beschikbaredagen", body: body_data.to_json, http_method: :post)
 
+
       if json.is_a?(Hash) && json["error"]
-        raise RecrasError.new(self), json["error"]["message"]
+        raise RecrasError.new(self), json["message"]
       else
         return json
       end
@@ -107,7 +118,7 @@ module Recras
 
 
     # make a reservation for this combination
-    def book(items: [], number_of_people: nil, date: nil, payment_method: "factuur", contact_form_details: {})
+    def book(items: [], number_of_people: nil, date: nil, payment_method: "factuur", status: "reservering", contact_form_details: {})
 
       product_items = convert_items(items, number_of_people)
       date = convert_date(date)
@@ -117,6 +128,7 @@ module Recras
           arrangement_id: id,
           producten: product_items,
           begin: date,
+          status: status,
           betaalmethode: payment_method,
           contactformulier: contact_form_details
         }
@@ -148,7 +160,7 @@ module Recras
     # translates the mapping between the Recras API
     # and the terms used in this gem
     def self.attribute_mapping
-      [["id", "id"],["weergavenaam", "name"],["mag_online", "visible_online"],["aantal_personen", "number_of_people"], ["mag_online_geboekt_worden_achteraf_betalen", "allowed_to_pay_later"], ["regels", Recras::CombinationItem], ["programma", Recras::Itinerary], ["onlineboeking_contactformulier_id", "contact_form_id"], ["prijs_pp_inc","price_per_person_incl_vat"], ["prijs_totaal_inc","price_total_incl_vat"]]
+      [["id", "id"],["weergavenaam", "name"],["mag_online", "visible_online"],["aantal_personen", "number_of_people"], ["mag_online_geboekt_worden_achteraf_betalen", "allowed_to_pay_later"], ["regels", Recras::CombinationItem], ["programma", Recras::Itinerary], ["onlineboeking_contactformulier_id", "contact_form_id"], ["prijs_pp_inc","price_per_person_incl_vat"], ["prijs_totaal_inc","price_total_incl_vat"],["los_op_planning", "seperate_planning"],["uitgebreide_omschrijving","description"], ["maximum_aantal_personen_online","max_number_of_people"], ["ontvangstlocatie", "welcome_location"]]
     end
 
     private
@@ -164,7 +176,7 @@ module Recras
     end
 
     def convert_items(items, number_of_people)
-      if items.any?
+      if items && items.any?
         # TODO
       elsif number_of_people && number_of_people > 0
         # assume that all the items will be chose the same amount

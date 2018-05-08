@@ -47,16 +47,24 @@ module Recras
         if n.include?("@@")
           if n.split("@@").last.downcase == 'time'
            data = Time.new(n.split("@@").first)
-           # puts data.inspect
-           # raise ERR
+          elsif n.split("@@").last.downcase == 'float'
+            data = n.split("@@").first.to_f
           else
             data = n.split("@@").first
           end
           params[n.split("@@").first] = data
         else
+          # puts "parsing value: #{n} => #{json[o]}"
           params[n] = json[o.to_s]
+          # puts "parsed value (#{params[n]})"
         end
 
+      
+      # assign boolean value
+      elsif [FalseClass, TrueClass].include?(n.class)
+        # puts "Parsing boolean value: #{n} = #{json[o]}"
+        params[n] = json[o]
+        # puts "#{n} => #{o}"
       # else, o is a class. Call the 'parse_children' method on it
       else
         # puts "n is a #{n.class.name}"
@@ -69,7 +77,9 @@ module Recras
           params[n.plural_name] = children
         end
       end
+
     end
+    params['json'] = json
     self.new(params)
   end
 

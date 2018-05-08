@@ -16,6 +16,7 @@ module Recras
     attr_accessor :field_identifier
     attr_accessor :contact_form
     attr_accessor :client
+    attr_accessor :json
     
     # Initializer to transform a +Hash+ into an Client object    
     # @param [Hash] args

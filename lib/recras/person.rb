@@ -18,6 +18,7 @@ module Recras
     attr_accessor :last_name
     attr_accessor :phone
     attr_accessor :email
+    attr_accessor :json
 
 
     #

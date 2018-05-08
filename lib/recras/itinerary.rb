@@ -12,6 +12,7 @@ module Recras
     attr_accessor :start_time
     attr_accessor :end_time
     attr_accessor :duration
+    attr_accessor :json
     
     # Initializer to transform a +Hash+ into an Client object    
     # @param [Hash] args
