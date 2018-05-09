@@ -118,7 +118,7 @@ module Recras
 
 
     # make a reservation for this combination
-    def book(items: [], number_of_people: nil, date: nil, payment_method: "factuur", status: "reservering", contact_form_details: {})
+    def book(items: [], marked_as_paid: false, number_of_people: nil, date: nil, payment_method: "factuur", status: "reservering", contact_form_details: {})
 
       product_items = convert_items(items, number_of_people)
       date = convert_date(date)
@@ -130,6 +130,7 @@ module Recras
           begin: date,
           status: status,
           betaalmethode: payment_method,
+          stuur_bevestiging_email: marked_as_paid,
           contactformulier: contact_form_details
         }
         json = client.make_request("onlineboeking/reserveer", body: body_data.to_json, http_method: :post)
