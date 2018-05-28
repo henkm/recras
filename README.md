@@ -36,6 +36,10 @@ To request two barcodes from two different ticket kinds (4 barcodes in total), y
 
 ```
 
+### PaymentMethod
+Obtain a list of payment methods: `@recras_client.payment_methods`
+
+
 ### Combinations
 The Recras system bundles different products together in 'combinations'. Their API uses the term 'arrangementen' for it.
 

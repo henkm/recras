@@ -138,7 +138,7 @@ module Recras
         if json.is_a?(Hash) && json["error"]
           raise RecrasError.new(self), json["error"]["message"]
         else
-          booking = Recras.parse_json(json: json, endpoint: "booking")
+          booking = Recras.parse_json(json: json, endpoint: "booking", client: client)
           return booking
         end
       else

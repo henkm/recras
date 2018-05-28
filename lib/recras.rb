@@ -14,6 +14,9 @@ require "recras/combination_item"
 require "recras/contact_form"
 require "recras/contact_form_field"
 require "recras/booking"
+require "recras/invoice"
+require "recras/payment_method"
+require "recras/payment"
 require "recras/itinerary"
 
 module Recras
@@ -28,7 +31,7 @@ module Recras
   # this method maps the recras API objects to
   # the names used by this gem
   def self.object_mappings
-  	[["personeel", Person], ["arrangement", Combination], ["contactformulier", ContactForm], ["velden", ContactFormField], ["booking", Booking]]
+  	[["betalingen", Payment],["personeel", Person], ["arrangement", Combination], ["contactformulier", ContactForm], ["velden", ContactFormField], ["booking", Booking], ["facturen", Invoice], ["betaalmethoden", PaymentMethod]]
   end
 
   def self.url

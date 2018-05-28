@@ -59,6 +59,17 @@ module Recras
 
 
     # returns an array of available combinations
+    def payment_methods
+      result = make_request("betaalmethoden")
+      a = []
+      for json in result
+        a << Recras.parse_json(json: json, endpoint: "betaalmethoden")
+      end
+      return a
+    end
+
+
+    # returns an array of available combinations
     def combinations
       result = make_request("arrangementen")
       a = []

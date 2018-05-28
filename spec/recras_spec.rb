@@ -29,7 +29,14 @@ describe Recras do
 
 		it "returns name 'Marthijn'" do
 			result = @client.me
-			expect(result.name).to eq "Marthijn Wolting"
+			expect(result.name).to eq "Marthijn"
+		end
+
+		it 'returns a list of payment methods' do
+			result = @client.payment_methods
+			expect(result).to be_an Array
+			# result.each{|item| puts item.inspect }
+			expect(result.first).to be_a Recras::PaymentMethod
 		end
 
 	  it "connects to the endpoint" do

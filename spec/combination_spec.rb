@@ -106,6 +106,26 @@ describe Recras::Combination do
 			expect(booking.customer_id).to be > 0
 			expect(booking.payment_url).to be nil
 		end
+
+		context "#make_invoice", focus: true do
+			before(:all) do
+				@booking = @combination.book(date: @time, number_of_people: 2, contact_form_details: @combination.contact_form.default_values)
+			end
+
+			it 'returns invoice object' do
+				invoice = @booking.make_invoice(status: "betaald")
+				# puts invoice.inspect
+				expect(invoice).to be_a Recras::Invoice
+			end
+
+			it 'returns payment object' do
+				@booking = @combination.book(date: @time, number_of_people: 2, contact_form_details: @combination.contact_form.default_values)
+				@invoice = @booking.make_invoice(status: "betaald")
+				@payment = @invoice.make_payment(payment_method_id: 3)
+				puts @payment.inspect
+				expect(invoice).to be_a Recras::Payment
+			end
+		end
 	end
 
 	context "#find" do
