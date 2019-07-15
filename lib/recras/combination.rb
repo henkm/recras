@@ -84,7 +84,8 @@ module Recras
 
 
       if json.is_a?(Hash) && json["error"]
-        raise RecrasError.new(self), json["message"]
+        puts "Error: #{json}"
+        raise RecrasError.new(self), json["error"]["message"]
       else
         return json
       end
@@ -179,7 +180,7 @@ module Recras
     def convert_items(items, number_of_people)
       if items && items.any?
         # TODO
-      elsif number_of_people && number_of_people > 0
+      elsif number_of_people && number_of_people.to_i > 0
         # assume that all the items will be chose the same amount
         items = []
         for combination_item in combination_items
@@ -191,7 +192,9 @@ module Recras
         mappings = {combination_item_id: "arrangementsregel_id", number_of_people: "aantal"}
         product_items = []
         for item in items
-          product_items << item.map {|k, v| [mappings[k], v] }.to_h
+          unless item[:number_of_people] && item[:number_of_people].to_i == 0
+            product_items << item.map {|k, v| [mappings[k], v] }.to_h
+          end
         end
         return product_items
       end
