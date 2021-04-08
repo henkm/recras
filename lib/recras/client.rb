@@ -26,7 +26,7 @@ module Recras
         instance_variable_set("@#{k}", v) unless v.nil?
       end
       if password.present? && password.length == 32
-        instance_variable_set("@api_key", password) unless v.nil?
+        instance_variable_set("@api_key", password)
       end
     end
 
