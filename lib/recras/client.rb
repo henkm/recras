@@ -1,6 +1,7 @@
 module Recras
 
   class Client
+    attr_accessor :api_key
     # @note The is a required parameter.
     attr_accessor :username
     # @return [String] Your Recras password
@@ -23,6 +24,9 @@ module Recras
       return if args.nil?
       args.each do |k,v|
         instance_variable_set("@#{k}", v) unless v.nil?
+      end
+      if password.present? && password.length == 32
+        instance_variable_set("@api_key", password) unless v.nil?
       end
     end
 

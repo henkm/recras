@@ -117,10 +117,15 @@ module Recras
 
     auth = client ? {username: client.username, password: client.password} : nil
 
+    headers = {}
+    if client.api_key
+      headers = {'Authorization' => "Bearer #{client.api_key}"}
+      auth    = nil
+    end
     if http_method && http_method.to_s == 'post'
-      response = HTTParty.post(url, basic_auth: auth, body: body)
+      response = HTTParty.post(url, basic_auth: auth, body: body, headers: headers)
     else
-      response = HTTParty.get(url, basic_auth: auth, body: body)
+      response = HTTParty.get(url, basic_auth: auth, body: body, headers: headers)
     end
 
     json = response.parsed_response
