@@ -137,6 +137,10 @@ module Recras
         json = client.make_request("onlineboeking/reserveer", body: body_data.to_json, http_method: :post)
 
         if json.is_a?(Hash) && json["error"]
+          puts "Data:"
+          puts body_data
+          puts "Response:"
+          puts json
           raise RecrasError.new(self), json["error"]["message"]
         else
           booking = Recras.parse_json(json: json, endpoint: "booking", client: client)
