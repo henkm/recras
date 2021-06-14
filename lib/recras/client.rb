@@ -78,7 +78,11 @@ module Recras
       result = make_request("arrangementen")
       a = []
       for json in result
-        a << Recras.parse_json(json: json, endpoint: "arrangementen", client: self)
+        begin
+          a << Recras.parse_json(json: json, endpoint: "arrangementen", client: self)
+        rescue
+          
+        end
       end
       return a
     end
