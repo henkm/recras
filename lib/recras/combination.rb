@@ -119,7 +119,7 @@ module Recras
 
 
     # make a reservation for this combination
-    def book(items: [], marked_as_paid: false, number_of_people: nil, date: nil, payment_method: "factuur", status: "reservering", contact_form_details: {})
+    def book(items: [], marked_as_paid: false, number_of_people: nil, date: nil, payment_method: "factuur", verbose: false, status: "reservering", contact_form_details: {})
 
       product_items = convert_items(items, number_of_people)
       date = convert_date(date)
@@ -144,6 +144,12 @@ module Recras
           raise RecrasError.new(self), json["error"]["message"]
         else
           booking = Recras.parse_json(json: json, endpoint: "booking", client: client)
+          if verbose
+            puts "Data:"
+            puts body_data
+            puts "Response:"
+            puts json
+          end
           return booking
         end
       else
